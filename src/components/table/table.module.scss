@@ -1,0 +1,18 @@
+.mtable {
+	width: 60%;
+	margin: 0 auto;
+	border-collapse: collapse;
+	border: 1px solid;
+}
+
+.mtable tr:hover {
+	background-color: rgba(60, 61, 71, 0.772);
+}
+
+.mtable th {
+	border: 1px solid;
+}
+
+.mtable td {
+	border: 1px solid;
+}
