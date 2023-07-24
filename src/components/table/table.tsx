@@ -1,6 +1,7 @@
 import styles from './table.module.scss'
 import { observer } from "mobx-react-lite"
 import { User } from '../../store/listinfo'
+import { useStore } from '../../store/store'
 
 interface Props {
     data: User[]
@@ -11,30 +12,39 @@ interface Props {
 
 const Table = observer((props: Props) => {
 
+
+    const { userStore } = useStore()
     const { data = [] } = props
 
 
 
     return (
 
-        <table className={`${styles.mtable} table-lg border-collapse mt-5 `}>
-            {/* head */}
-            <thead className=" bg-black" >
-                <tr className=" bg-black">
-                    <th>ID</th>
-                    <th>Заголовок</th>
-                    <th>Описание</th>
+        <table className={`${styles.mtable} table-sm border-collapse mt-5 `}>
+            <thead className=" bg-gray-700" >
+                <tr className=" bg-gray-700">
+                    <th onClick={() => userStore.sortData('id')}>ID</th>
+                    <th onClick={() => userStore.sortData('title')}>Заголовок</th>
+                    <th onClick={() => userStore.sortData('body')}>Описание</th>
                 </tr>
             </thead>
 
             <tbody className=" bg-slate-50 ">
-                {data.map((item) => (
-                    <tr key={item.id} className={'hover'}>
-                        <td>{item.id}</td>
-                        <td>{item.title}</td>
-                        <td>{item.body}</td>
-                    </tr>
-                ))}
+                {data
+                    .filter(item =>
+                        Object.values(item)
+                            .join('')
+                            .toLowerCase()
+                            .includes(userStore.filterText.toLowerCase())
+                    )
+                    .map(item => (
+                        <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td>{item.title}</td>
+                            <td>{item.body}</td>
+                        </tr>
+                    ))}
+
             </tbody>
         </table>
     )

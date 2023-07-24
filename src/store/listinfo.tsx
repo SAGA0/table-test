@@ -2,17 +2,20 @@ import { makeAutoObservable } from 'mobx';
 import axios from 'axios';
 
 export interface User {
-    id: string | number
-    body: string
-    title: string
+    id?: string | number
+    body?: string
+    title?: string
+    field?: string
 }
+
 
 export class UserModel {
     allData: User[] = []
     data: User[] = []
-    offset = 10
-    page = 1
-    error = null
+    filterText: string = ''
+    offset: number = 10
+    page: number = 1
+    error: boolean = false
 
     constructor () {
         makeAutoObservable(this)
@@ -27,7 +30,7 @@ export class UserModel {
             })
             .catch(err => {
                 this.error = err
-                console.log('Error');
+                console.log(this.error);
             })
 
     };
@@ -57,5 +60,16 @@ export class UserModel {
 
 
     }
+
+    filterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.filterText = event.target.value;
+    };
+
+    sortData = (field: string) => {
+        // @ts-ignore
+        this.data = this.data.sort((a, b) => { return a[field] > b[field] ? 1 : -1 })
+    }
+
+
 
 }
